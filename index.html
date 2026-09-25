@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"
+    />
+    <meta name="theme-color" content="#050816" />
+    <meta
+      name="description"
+      content="空を見上げると人工衛星の位置が分かるARビューア。軌道データは CelesTrak を使用。"
+    />
+    <title>StellaLive — 衛星AR</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23050816'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%237dd3fc'/%3E%3Ccircle cx='48' cy='18' r='2' fill='%23fff'/%3E%3Ccircle cx='16' cy='22' r='1.5' fill='%23fff'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="styles.css" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/satellite.js@5.0.0/dist/satellite.min.js"
+      defer
+    ></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <video id="camera" playsinline muted autoplay></video>
+    <canvas id="sky"></canvas>
+
+    <div id="gate" class="panel">
+      <p class="eyebrow">CelesTrak × GitHub Pages</p>
+      <h1>StellaLive</h1>
+      <p class="lede">
+        カメラを空に向けると、今見えている人工衛星の名前と方向を重ねて表示します。
+        位置計算は CelesTrak の GP（TLE）データと SGP4 です。
+      </p>
+      <ul class="hints">
+        <li>HTTPS のスマートフォンで開いてください（向きセンサーとカメラのため）</li>
+        <li>屋外・空が開けた場所が向いています</li>
+        <li>iPhone では「モーション」の許可が必要です</li>
+      </ul>
+      <button id="start-btn" type="button">空を見る</button>
+      <p id="gate-error" class="error" hidden></p>
+    </div>
+
+    <header id="hud-top" hidden>
+      <div>
+        <strong>StellaLive</strong>
+        <span id="status-line">準備中</span>
+      </div>
+      <div class="chips">
+        <label>
+          カタログ
+          <select id="catalog">
+            <option value="visual">明るい衛星 (~100)</option>
+            <option value="stations">宇宙ステーション</option>
+            <option value="gps-ops">GPS</option>
+            <option value="intelsat">Intelsat</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <div id="compass" hidden>
+      <span id="heading-readout">—°</span>
+      <span id="elev-readout">仰角 —°</span>
+    </div>
+
+    <aside id="sat-list" hidden>
+      <h2>頭上の衛星</h2>
+      <p id="list-empty">地平線より上の衛星はありません</p>
+      <ul id="visible-sats"></ul>
+    </aside>
+
+    <p id="toast" hidden></p>
+  </body>
+</html>
